@@ -1,0 +1,26 @@
+<annotation>
+	<folder>test</folder>
+	<filename>075.jpg</filename>
+	<path>D:\RESEARCH\Dasarnya\MLDL_FOLDER\OBJECT_DETECTION\img_labelling\windows_v1.8.0\test\075.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>479</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Zebra</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>187</xmin>
+			<ymin>143</ymin>
+			<xmax>388</xmax>
+			<ymax>388</ymax>
+		</bndbox>
+	</object>
+</annotation>
