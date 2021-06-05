@@ -1,0 +1,77 @@
+Hi Everyone, In this tensorflow tutorial, I have explained how to train tensorflow object detection api with your own data. I have used tensorflow latest version here. For
+
+model training, I am using google colab free GPU. It means it’s a full-on tutorial on how to train object detection api with your own data or custom object detection model on google colab. 
+I have taken the example of playing card detection in this video and the model is taken from tensorflow model zoo. 
+
+
+
+
+-----Time links to each step in the video-----
+3:24​ Step  1. Install TensorFlow object detection api using powershell,Set up Object Detection directory and python virtual environment at once
+6:30​ Step  2. Gather and label pictures
+13:51​ Step 3. Generate training and testing dataset
+16:39​ Step 4. Create train tfrecord and test tfrecord files
+20:23​ Step 5. Create label map and configure training
+28:55​ Step 6. Setup google colab for object detection model training
+33:20​ Step 7. Start model training on colab
+33:56​ Step 8. Export inference graph
+36:57​ Step 9. Try out your object detector for images.
+39:46​ Step 10. Try out your object detector on live webcam.
+
+!git clone https://github.com/tensorflow/models.git
+
+!cd models/research
+# Compile protos.
+!protoc object_detection/protos/*.proto --python_out=.
+# Install TensorFlow Object Detection API.
+!cp object_detection/packages/tf2/setup.py .
+!python -m pip install .
+
+!python object_detection/builders/model_builder_tf2_test.py
+
+!python setup.py build
+!python setup.py install
+
+1. Github ripo link - https://github.com/jakkcoder/widows-object-detection-setup
+this contains:
+ a.  PowerShell script to install and set up tensorflow object detection api.
+ b. generate_labelmap.py :- to create labelmap file for object detection.
+ c. generate_tfrecord.py :- to create tfrecord file for training and testing data.
+ d. object_detection_tutorial.ipynb:- run the inference file for live cam object detection.
+ e. xml_to_csv.py :- Generate the csv file for training and testing images
+2. Download labelImg tool for this link :- https://tzutalin.github.io/labelImg/​
+3. run this command for generating csv file for training and testing images 
+ python xml_to_csv.py
+4.  run this command for generting labelmap.pbtxt file 
+ python generate_labelmap.py
+5. Generate tfrecord file for training by this command 
+ python generate_tfrecord.py --csv_input=images/train_labels.csv --image_dir=images/train --output_path=train.record
+6. Generate tfrecord file for training by this command
+ python generate_tfrecord.py --csv_input=images/test_labels.csv --image_dir=images/test --output_path=test.record
+7. python generate_labelmap.py
+7. Here are the argument to be updated on the config file for model training 
+ num_classes: 5  [give number of classes here]
+ learning_rate_base: 0.8e-3
+ warmup_learning_rate: 0.0001
+ fine_tune_checkpoint: "efficientdet_d0_coco17_tpu-32/checkpoint/ckpt-0"
+ fine_tune_checkpoint_type: "detection"
+ label_map_path: "images/labelmap.pbtxt"
+ input_path: "train.record"
+ label_map_path: "images/labelmap.pbtxt"
+ input_path: "test.record"
+ 
+8. train model command 
+!python model_main_tf2.py ----num_train_steps=6000 --pipeline_config_path=ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8/pipeline.config --model_dir=training --alsologtostderr
+ 
+9. export infrence graph command 
+ python exporter_main_v2.py --trained_checkpoint_dir=training --pipeline_config_path=training/ssd_efficientdet_d0_512x512_coco17_tpu-8.config --output_directory inference_graph
+
+pip install tf-models-official
+pip install tf_slim
+
+untuk melatih, kasih batch size nya 1 aja + ukuran gambar dikecilin
+Model dari sini -> http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8.tar.gz
+
+For extracting the model in kaggle, use this ->
+!gunzip '/kaggle/working/TF-2.x-Object-Detection/ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8.tar.gz'
+!tar xf '/kaggle/working/TF-2.x-Object-Detection/ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8.tar'
